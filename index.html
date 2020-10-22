@@ -21,7 +21,7 @@
     <p id='result'></p><hr>
     <p >由于众多浏览器已不再支持非安全域的定位请求，为保位成功率和精度，请升级您的站点到HTTPS。</p>
 </div>
-<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=您申请的key值"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=564a9e95192a57f5786737cd6a153533"></script>
 <script type="text/javascript">
     var map = new AMap.Map('container', {
         resizeEnable: true
@@ -46,7 +46,7 @@
     });
     //解析定位结果
     function onComplete(data) {
-        alert(JSON.stringify(data))
+        // alert(JSON.stringify(data))
         console.log(data)
         document.getElementById('status').innerHTML='定位成功'
         var str = [];
@@ -57,11 +57,45 @@
         }//如为IP精确定位结果则没有精度信息
         str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
         document.getElementById('result').innerHTML = str.join('<br>');
+
+        getPositionByLonLats(data.position.lng, data.position.lat)
     }
     //解析定位错误信息
     function onError(data) {
         document.getElementById('status').innerHTML='定位失败'
         document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
+    }
+    // 根据经纬度获得详细地址
+    function getPositionByLonLats(lng, lat) {
+        // console.log("经度："+lng+"纬度"+lat);
+        // var lnglatXY = [lng, lat];// 地图上所标点的坐标
+        // AMap.service('AMap.Geocoder', function() {// 回调函数
+        //     geocoder = new AMap.Geocoder({});
+        //     geocoder.getAddress(lnglatXY, function(status, result) {
+        //         if (status === 'complete' && result.info === 'OK') {
+        //             // console.log(result.regeocode.formattedAddress);
+        //             var address = result.regeocode.formattedAddress;
+        //             console.log(address);
+        //         } else {
+        //         }
+        //     });
+        // });
+
+        AMap.plugin('AMap.Geocoder', function() {
+            var geocoder = new AMap.Geocoder({
+                // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+                city: '010'
+            })
+            
+            var lnglat = [116.396574, 39.992706]
+
+            geocoder.getAddress(lnglat, function(status, result) {
+                if (status === 'complete' && result.info === 'OK') {
+                    console.log(result)
+                    // result为对应的地理位置详细信息
+                }
+            })
+        })
     }
 </script>
 </body>
