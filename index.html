@@ -46,7 +46,8 @@
     });
     //解析定位结果
     function onComplete(data) {
-      console.log(data)
+        alert(JSON.stringify(data))
+        console.log(data)
         document.getElementById('status').innerHTML='定位成功'
         var str = [];
         str.push('定位结果：' + data.position);
